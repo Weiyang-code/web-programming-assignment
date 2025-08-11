@@ -10,7 +10,7 @@ include '../includes/config.php';
 $user_id = $_SESSION['user_id'];
 
 // Get user's questions
-$stmt = $conn->prepare("SELECT id, course, topic, question_text, question_type, marks, created_at FROM questions WHERE user_id = ? ORDER BY created_at DESC");
+$stmt = $conn->prepare("SELECT id, course_id, topic, question_text, question_type, marks, created_at FROM questions WHERE user_id = ? ORDER BY created_at DESC");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -19,12 +19,14 @@ $stmt->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Questions - Question Bank</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
+
 <body>
     <!-- Header Navigation -->
     <header class="site-header">
@@ -48,7 +50,7 @@ $stmt->close();
                 <h1>Manage Questions</h1>
                 <p>View and organize your question collection</p>
             </div>
-            
+
             <?php if (empty($questions)): ?>
                 <div class="empty-state">
                     <h3>No questions yet</h3>
@@ -57,28 +59,33 @@ $stmt->close();
                 </div>
             <?php else: ?>
                 <div class="mb-lg">
-                    <p><?php echo count($questions); ?> question<?php echo count($questions) != 1 ? 's' : ''; ?> in your bank</p>
+                    <p><?php echo count($questions); ?> question<?php echo count($questions) != 1 ? 's' : ''; ?> in your
+                        bank</p>
                 </div>
-                
+
                 <?php foreach ($questions as $question): ?>
-                    <div class="question-card">
-                        <div class="question-meta">
-                            <span><strong><?php echo htmlspecialchars($question['course']); ?></strong> • <?php echo htmlspecialchars($question['topic']); ?></span>
-                            <span><?php echo date('M j, Y', strtotime($question['created_at'])); ?></span>
+                    <a href="edit_question.php?id=<?php echo $question['id']; ?>" class="question-card-link">
+                        <div class="question-card">
+                            <div class="question-meta">
+                                <span><strong><?php echo htmlspecialchars($question['course_id']); ?></strong> •
+                                    <?php echo htmlspecialchars($question['topic']); ?></span>
+                                <span><?php echo date('M j, Y', strtotime($question['created_at'])); ?></span>
+                            </div>
+
+                            <div class="question-content">
+                                <?php echo nl2br(htmlspecialchars($question['question_text'])); ?>
+                            </div>
+
+                            <div class="question-details">
+                                <span>Type: <?php echo htmlspecialchars($question['question_type']); ?></span>
+                                <span>Marks: <?php echo htmlspecialchars($question['marks']); ?></span>
+                            </div>
                         </div>
-                        
-                        <div class="question-content">
-                            <?php echo nl2br(htmlspecialchars($question['question_text'])); ?>
-                        </div>
-                        
-                        <div class="question-details">
-                            <span>Type: <?php echo htmlspecialchars($question['question_type']); ?></span>
-                            <span>Marks: <?php echo htmlspecialchars($question['marks']); ?></span>
-                        </div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
+
             <?php endif; ?>
-            
+
             <p class="text-center mt-lg">
                 <a href="dashboard.php">← Back to Dashboard</a> |
                 <a href="create_question.php">Create New Question</a>
@@ -93,4 +100,5 @@ $stmt->close();
         </div>
     </footer>
 </body>
+
 </html>

@@ -10,7 +10,7 @@ include '../includes/config.php';
 $user_id = $_SESSION['user_id'];
 
 // Get user's questions grouped by course and topic
-$stmt = $conn->prepare("SELECT id, course, topic, question_text, question_type, marks FROM questions WHERE user_id = ? ORDER BY course, topic, question_type");
+$stmt = $conn->prepare("SELECT id, course_id, topic, question_text, question_type, marks FROM questions WHERE user_id = ? ORDER BY course_id, topic, question_type");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -20,7 +20,7 @@ $stmt->close();
 // Group questions by course
 $courses = [];
 foreach ($questions as $question) {
-    $courses[$question['course']][] = $question;
+    $courses[$question['course_id']][] = $question;
 }
 
 $generated_exam = null;

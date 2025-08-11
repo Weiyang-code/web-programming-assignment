@@ -3,8 +3,8 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db = "questions_bank"; // Fixed database name for consistency
-$port = 3307; // Ensure the port is set correctly if needed
+$db = "question_bank"; // Fixed database name for consistency
+$port = 3306; // Ensure the port is set correctly if needed
 
 // Create connection
 $conn = new mysqli($host, $user, $pass, $db, $port);

@@ -468,8 +468,15 @@ label {
   transition: box-shadow 0.2s ease;
 }
 
-.question-card:hover {
-  box-shadow: var(--shadow-light);
+/* .question-card:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+} */
+
+a.question-card-link:hover {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .question-meta {
