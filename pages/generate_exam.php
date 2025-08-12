@@ -9,18 +9,24 @@ include '../includes/config.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Get user's questions grouped by course and topic
-$stmt = $conn->prepare("SELECT id, course_id, topic, question_text, question_type, marks FROM questions WHERE user_id = ? ORDER BY course_id, topic, question_type");
+// Get user's questions with course names
+$stmt = $conn->prepare("
+    SELECT q.id, q.course_id, q.topic, q.question_text, q.question_type, q.marks, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_option, c.course_name 
+    FROM questions q 
+    JOIN courses c ON q.course_id = c.id 
+    WHERE q.user_id = ? 
+    ORDER BY c.course_name, q.topic, q.question_type
+");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $questions = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Group questions by course
+// Group questions by course name
 $courses = [];
 foreach ($questions as $question) {
-    $courses[$question['course_id']][] = $question;
+    $courses[$question['course_name']][] = $question;
 }
 
 $generated_exam = null;
@@ -57,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generate_exam'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Exam Paper - Question Bank</title>
+    <title>UCSI University</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
@@ -79,10 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generate_exam'])) {
     <!-- Main Content -->
     <main class="main-content">
         <div class="exam-container">
-            <div class="header">
-                <h1>Generate Exam Paper</h1>
-                <p>Create an exam by selecting questions from your bank</p>
-            </div>
             
             <?php if (empty($questions)): ?>
                 <div class="empty-state text-center">
@@ -139,28 +141,119 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generate_exam'])) {
                 <?php else: ?>
                     <!-- Generated Exam Display -->
                     <div class="generated-exam">
-                        <div class="text-center mb-lg">
-                            <h2><?php echo htmlspecialchars($generated_exam['title']); ?></h2>
-                            <p>Total Marks: <?php echo $generated_exam['total_marks']; ?></p>
-                            <hr style="border: none; border-top: 1px solid var(--divider-grey); margin: var(--spacing-md) 0;">
+                        <!-- Exam Header Page -->
+                        <div class="exam-header-page">
+                            <div class="exam-header-content">
+                                <div class="school-logo-section">
+                                    <div class="logo-placeholder">
+                                    <img src="/question-bank/assets/images/ucsi_logo.png" alt="UCSI University Logo" />
+                                    </div>
+                                </div>
+                                
+                                <div class="exam-title-section">
+                                    <h2 class="exam-main-title"><?php echo htmlspecialchars($generated_exam['title']); ?></h2>
+                                    <p class="exam-subtitle">Academic Examination Paper</p>
+                                </div>
+                                
+                                <div class="student-info-section">
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <label>Student Name:</label>
+                                            <div class="underline-field">_________________________________</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Student ID:</label>
+                                            <div class="underline-field">_________________________________</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Course:</label>
+                                            <div class="underline-field">_________________________________</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Date:</label>
+                                            <div class="underline-field"><?php echo date('d/m/Y'); ?></div>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Time:</label>
+                                            <div class="underline-field">_________________________________</div>
+                                        </div>
+                                        <!-- <div class="info-item">
+                                            <label>Duration:</label>
+                                            <div class="underline-field">_________________________________</div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                
+                                <div class="exam-summary">
+                                    <div class="summary-item">
+                                        <strong>Total Questions:</strong> <?php echo count($generated_exam['questions']); ?>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Total Marks:</strong> <?php echo $generated_exam['total_marks']; ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="instructions-section">
+                                    <h3>Instructions:</h3>
+                                    <ul class="instruction-list">
+                                        <li>Write your name and student ID clearly at the top of this page</li>
+                                        <li>Answer all questions in the spaces provided</li>
+                                        <li>Show all your working for calculation questions</li>
+                                        <li>Write clearly and legibly</li>
+                                        <li>Do not use pencil or erasable ink</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
                         </div>
                         
-                        <?php foreach ($generated_exam['questions'] as $index => $question): ?>
-                            <div class="exam-question">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-sm);">
-                                    <strong>Q<?php echo $index + 1; ?>.</strong>
-                                    <span>[<?php echo $question['marks']; ?> marks]</span>
+                        <!-- Questions Section -->
+                        <div class="questions-section">
+                            <h3 class="questions-header">Questions</h3>
+                            
+                            <?php foreach ($generated_exam['questions'] as $index => $question): ?>
+                                <div class="exam-question">
+                                    <div class="question-header">
+                                        <span class="question-number">Q<?php echo $index + 1; ?>.</span>
+                                        <span class="question-marks">[<?php echo $question['marks']; ?> marks]</span>
+                                    </div>
+                                    
+                                    <div class="question-text">
+                                        <?php echo nl2br(htmlspecialchars($question['question_text'])); ?>
+                                    </div>
+                                    
+                                    <?php if ($question['question_type'] === 'MCQ' && !empty($question['option_a'])): ?>
+                                        <div class="mcq-options-print">
+                                            <div class="option">
+                                                <span class="option-label">A.</span>
+                                                <?php echo htmlspecialchars($question['option_a']); ?>
+                                            </div>
+                                            <div class="option">
+                                                <span class="option-label">B.</span>
+                                                <?php echo htmlspecialchars($question['option_b']); ?>
+                                            </div>
+                                            <div class="option">
+                                                <span class="option-label">C.</span>
+                                                <?php echo htmlspecialchars($question['option_c']); ?>
+                                            </div>
+                                            <div class="option">
+                                                <span class="option-label">D.</span>
+                                                <?php echo htmlspecialchars($question['option_d']); ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                    
+                                    <!-- <div class="question-type">
+                                        Type: <?php echo htmlspecialchars($question['question_type']); ?>
+                                    </div> -->
                                 </div>
-                                <p><?php echo nl2br(htmlspecialchars($question['question_text'])); ?></p>
-                                <small style="color: var(--text-grey);">
-                                    Type: <?php echo htmlspecialchars($question['question_type']); ?>
-                                </small>
-                            </div>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                     
-                    <div class="text-center mt-lg">
-                        <button onclick="window.print()" class="btn btn-inline" style="margin-right: var(--spacing-sm);">Print Exam</button>
+                    <div class="print-section">
+                      
+                        <button onclick="window.print()" class="btn btn-inline">Print Exam</button>
                         <a href="generate_exam.php" class="btn btn-inline">Generate Another</a>
                     </div>
                 <?php endif; ?>
