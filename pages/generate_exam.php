@@ -159,15 +159,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generate_exam'])) {
                                     <div class="info-grid">
                                         <div class="info-item">
                                             <label>Student Name:</label>
-                                            <div class="underline-field">_________________________________</div>
+                                            <div class="underline-field"></div>
                                         </div>
                                         <div class="info-item">
                                             <label>Student ID:</label>
-                                            <div class="underline-field">_________________________________</div>
+                                            <div class="underline-field"></div>
                                         </div>
                                         <div class="info-item">
                                             <label>Course:</label>
-                                            <div class="underline-field">_________________________________</div>
+                                            <div class="underline-field"></div>
                                         </div>
                                         <div class="info-item">
                                             <label>Date:</label>
@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generate_exam'])) {
                                         </div>
                                         <div class="info-item">
                                             <label>Time:</label>
-                                            <div class="underline-field">_________________________________</div>
+                                            <div class="underline-field"></div>
                                         </div>
                                         <!-- <div class="info-item">
                                             <label>Duration:</label>
