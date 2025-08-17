@@ -17,12 +17,14 @@ $stmt->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Question Bank</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
+
 <body>
     <!-- Header Navigation -->
     <header class="site-header">
@@ -46,7 +48,7 @@ $stmt->close();
                 <h1>Welcome, <?php echo htmlspecialchars($user_name ?? 'Lecturer'); ?></h1>
                 <p>Manage your question bank and create academic assessments</p>
             </div>
-            
+
             <nav aria-label="Main navigation">
                 <ul class="nav-menu">
                     <li>
@@ -74,6 +76,14 @@ $stmt->close();
                         </a>
                     </li>
                     <li>
+                        <a href="exam_history.php">
+                            Exam History
+                            <small style="display: block; color: var(--text-grey); font-size: 0.875rem; margin-top: 4px;">
+                                View your exam history
+                            </small>
+                        </a>
+                    </li>
+                    <li>
                         <a href="logout.php" style="color: var(--error-red);">
                             Sign Out
                             <small style="display: block; color: var(--text-grey); font-size: 0.875rem; margin-top: 4px;">
@@ -81,6 +91,7 @@ $stmt->close();
                             </small>
                         </a>
                     </li>
+
                 </ul>
             </nav>
         </div>
@@ -93,4 +104,5 @@ $stmt->close();
         </div>
     </footer>
 </body>
+
 </html>

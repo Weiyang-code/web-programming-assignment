@@ -1,0 +1,174 @@
+/* exam_history.css — fully scoped to the Exam History page */
+
+/* ---------- Page container & spacing ---------- */
+.main-content.exam-history {
+    padding: 24px 16px; /* denser than global */
+  }
+  
+  .exam-history .eh-container {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  
+  /* ---------- Header ---------- */
+  .exam-history .eh-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .exam-history .eh-header h1 {
+    margin-bottom: 8px;
+  }
+  
+  /* ---------- Alerts ---------- */
+  .exam-history .eh-alert {
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin: 12px 0 18px;
+    font-size: 0.95rem;
+    text-align: center;
+    border: 1px solid transparent;
+  }
+  .exam-history .eh-alert--success {
+    color: #2d5016;
+    background: rgba(45, 80, 22, 0.08);
+    border-color: rgba(45, 80, 22, 0.2);
+  }
+  .exam-history .eh-alert--error {
+    color: #d73502;
+    background: rgba(215, 53, 2, 0.08);
+    border-color: rgba(215, 53, 2, 0.2);
+  }
+  
+  /* ---------- Search bar ---------- */
+  .exam-history .eh-search {
+    background: var(--warm-white);
+    border: 1px solid var(--divider-grey);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .exam-history .eh-search__label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: var(--text-black);
+  }
+  .exam-history .eh-search__row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .exam-history .eh-input {
+    flex: 1;
+    min-width: 220px;
+    border: 1px solid var(--divider-grey);
+    border-radius: 6px;
+    padding: 9px 12px;
+    background: var(--warm-white);
+  }
+  
+  /* ---------- Buttons (scoped) ---------- */
+  .exam-history .eh-btn {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    width: auto !important; /* override global full-width buttons */
+  }
+  .exam-history .eh-btn--small { padding: 6px 10px; font-size: 0.88rem; }
+  .exam-history .eh-btn--primary { background: var(--text-black); color: var(--warm-white); }
+  .exam-history .eh-btn--ghost   { background: var(--light-beige); color: var(--text-black); border-color: var(--divider-grey); }
+  .exam-history .eh-btn--danger  { background: #d73502; color: #fff; }
+  
+  /* Ensure button colors win over aggressive globals */
+  .exam-history .eh-actions .eh-btn--primary { background: var(--text-black) !important; color: var(--warm-white) !important; }
+  .exam-history .eh-actions .eh-btn--danger  { background: #d73502 !important; color: #fff !important; }
+  
+  /* ---------- Table wrapper ---------- */
+  .exam-history .eh-tablewrap {
+    background: var(--warm-white);
+    border: 1px solid var(--divider-grey);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: none;
+  }
+  
+  /* ---------- Table ---------- */
+  .exam-history .eh-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .exam-history .eh-table thead th {
+    background: #efece6; /* subtle beige head */
+    text-align: left;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--divider-grey);
+  }
+  .exam-history .eh-table tbody td {
+    padding: 10px 12px !important; /* compact rows */
+    vertical-align: middle !important;
+    line-height: 1.35;
+    border-bottom: 1px solid var(--divider-grey);
+  }
+  .exam-history .eh-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Title column: keep one line with ellipsis for tidy rows */
+  .exam-history .eh-ellipsis {
+    max-width: 380px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* ---------- Actions column ---------- */
+  .exam-history .eh-col-actions { width: 210px; }
+  
+  .exam-history .eh-actions {
+    display: flex;
+    align-items: center;   /* vertical alignment */
+    gap: 8px;              /* spacing between buttons */
+    justify-content: flex-start;
+  }
+  
+  .exam-history .eh-actions a,
+  .exam-history .eh-actions button {
+  margin: 0;             /* remove weird gaps */
+  display: inline-block; /* keep buttons inline */
+}
+
+  /* Neutralize global form “card” styles without killing child buttons */
+  .exam-history .eh-actions form,
+  .exam-history .eh-inlineform {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    display: inline; /* keep inline with the Open button */
+  }
+  
+  /* ---------- Empty state ---------- */
+  .exam-history .eh-empty {
+    text-align: center;
+    background: var(--warm-white);
+    border: 1px solid var(--divider-grey);
+    border-radius: 8px;
+    padding: 28px;
+  }
+  .exam-history .eh-empty__icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  
+  /* -----*
+  
